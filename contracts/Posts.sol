@@ -7,9 +7,10 @@ import "hardhat/console.sol";
 contract Posts {
     uint totalPosts;
 
+    event Log(string message);
 
     struct Post{
-        address postFrom;
+        address madeBy;
         uint[] subPosts;
         uint postId; 
         string message;
@@ -21,12 +22,11 @@ contract Posts {
     uint[] rootPostIds;
 
     constructor() payable {
-        console.log("We have been constructed!");
     }
 
-    function _createPost(uint postId, string memory _message) private view returns (Post memory){
+    function _createPost(uint postId, string memory _message, address author) private view returns (Post memory){
         return Post({
-            postFrom: msg.sender,
+            madeBy: author,
             subPosts: new uint[](0),
             postId: postId,
             message: _message,
@@ -35,30 +35,19 @@ contract Posts {
         });
     }
 
-    // function addPost(string memory _postMessage) public {
-    //     posts[totalPosts] = _createPost(totalPosts, _postMessage);
-    //     rootPostIds.push(totalPosts);
-    // }
-
-    // function addPost(string memory _postMessage, uint _parentId) public {
-    //     posts[totalPosts] = _createPost(totalPosts, _postMessage);
-
-    //     if (_parentId != totalPosts){
-    //         posts[_parentId].subPosts.push(totalPosts);
-    //     }
-
-    //     totalPosts += 1;
-
-    // }
-
-    function f(uint _in) public pure returns (uint out) {
-        out = _in;
+    function rootPost(string memory _postMessage, address author) public {
+        posts[totalPosts] = _createPost(totalPosts, _postMessage, author);
+        rootPostIds.push(totalPosts);
+        totalPosts += 1;
     }
 
-    function f(uint _in, bool _really) public pure returns (uint out) {
-        if (_really) {
-            out = _in;
-        }
+    function subPost(string memory _postMessage, uint _parentId, address author) public {
+
+        require (totalPosts > _parentId, "Problem adding comment, invalid _parentId.");
+
+        posts[_parentId].subPosts.push(totalPosts);
+        posts[totalPosts] = _createPost(totalPosts, _postMessage, author);
+        totalPosts += 1;
     }
 
     function getPost(uint postId) public view returns (Post memory){

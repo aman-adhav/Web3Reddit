@@ -1,3 +1,5 @@
+const hre = require("hardhat");
+
 const main = async () => {
     const postsContractFactory = await hre.ethers.getContractFactory('Posts');
     const postsContract = await postsContractFactory.deploy({
@@ -40,8 +42,15 @@ const main = async () => {
         }
     }
 
-    let randomf = await postsContract.f(1);
-    await randomf.wait();
+    try{
+      let randomf = await postsContract.f(1);
+      await randomf.wait();
+      process.exit(0);
+    } catch(error){
+      console.log(error);
+      postsContract.
+      process.exit(1);
+    }
     
     let randomf1 = await postsContract.f(1, true);
     await randomf1.wait();
