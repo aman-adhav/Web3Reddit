@@ -1,8 +1,16 @@
-# Basic Sample Hardhat Project
+# Web3.0 Reddit
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Recreating Reddit using Solidity and React! This is the first iteration of the app and as such, it'll have the following functions:
 
-Try running some of the following tasks:
+- Creation of Threads
+- Creation of Posts
+- Liking and disliking comments
+
+What to build in version 2.0?
+
+- Querying posts and threads.
+- Creation of subreddits
+
 
 ```shell
 npx hardhat accounts
