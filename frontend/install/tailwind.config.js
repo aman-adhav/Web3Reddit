@@ -4,9 +4,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        reddit_dark: {
+        crypdit_dark: {
           DEFAULT: '#030303',
-          search_text: '#272738'
+          search_form:'#1a1a1a',
+          search_text: '#272738',
+        },
+        crypdit_border: {
+          DEFAULT: '#343536',
+        },
+        crypdit_post:{
+          form:'#1a1a1a',
+          text: '#272738',
+        },
+        crypdit_text: {
+          DEFAULT: 'rgb(215, 218, 220)',
+          darker: '#818384',
         },
       },
     },
