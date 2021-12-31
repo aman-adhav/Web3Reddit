@@ -1,6 +1,6 @@
 import './style.css';
 import Subheader from './Subheader';
-
+import AuthModal from './AuthModal';
 import Header from "./Header";
 import PostForm from './PostForm';
 function App() {
@@ -10,6 +10,7 @@ function App() {
       <Header />
       <Subheader /> 
       <PostForm />
+      <AuthModal />
       <div className='px-6 bg-crypdit_dark text-crypdit_text'>
         <div className="border border-crypdit_border bg-crypdit_post-form p-2 rounded-md">
           <h5 className="text-crypdit_text-darker text-sm mb-1">Posted by a/someuser + timestamp</h5>
@@ -46,6 +47,7 @@ There are many variations of passages of Lorem Ipsum available, but the majority
             </div>
         </div>
       </div>
+      
     </div>
   );
 }

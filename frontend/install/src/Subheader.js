@@ -8,7 +8,7 @@ function Subheader(){
             </div>
             <div className="bg-crypdit_dark-search_text">
             <div className='mx-4 relative flex'>
-                <div className="h-20 w-20 rounded-full overflow-hidden relative -top-3 border-4 border-white bg-white">
+                <div className="flex-shrink-0 h-20 w-20 rounded-full overflow-hidden relative -top-3 border-4 border-white bg-white">
                 <img src={SubheaderLogo} />
                 </div>
                 <div className='pt-2 pl-4'>
