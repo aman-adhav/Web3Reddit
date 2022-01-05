@@ -4,6 +4,7 @@ import AuthModalContext from './AuthModalContext';
 import ClickOutHandler from 'react-clickout-handler';
 import AccountContext from './AccountContext';
 
+
 function AuthModal() {
 
     const modalContext = useContext(AuthModalContext)

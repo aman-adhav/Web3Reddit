@@ -5,6 +5,7 @@ import {useState, useContext} from 'react';
 import ClickOutHandler from 'react-clickout-handler';
 import AuthModalContext from './AuthModalContext';
 import AccountContext from './AccountContext';
+import {Link} from "react-router-dom";
 
 function Header() {
     const [userDropdownVisbility, setUserDropdownVisbility] = useState('hidden')
@@ -21,10 +22,14 @@ function Header() {
 
     const account = useContext(AccountContext);
 
+    const shortAccountAdr = account.publicKey.substring(0,6) + "..." + account.publicKey.substring(37, 41);
+
     return (
         <header className="w-full bg-crypdit_dark p-2">
         <div className="mx-4 flex relative">
-          <img src={Logo} alt="" className="w-8 h-8 mr-4"/>
+          <Link to="/">
+            <img src={Logo} alt="" className="w-8 h-8 mr-4"/>
+          </Link>
         
           <form action="" className="bg-crypdit_dark-search_text px-3 flex rounded-md border border-gray-700 mx-4 flex-grow">
             <SearchIcon className="text-gray-300 h-6 w-6 mt-1" />
@@ -70,7 +75,7 @@ function Header() {
             <div className={"absolute right-0 top-8 bg-crypdit_dark border border-gray-700 z-10 rounded-md overflow-hidden text-crypdit_text " + userDropdownVisbility}>
             {account.publicKey && (
               <span className="block w-50 py-2 px-3 text-sm">
-                Hello, {account.publicKey.substring(0,6) + "..." + account.publicKey.substring(37, 41)}!
+                Hello, {shortAccountAdr}!
               </span>
             )}
             
