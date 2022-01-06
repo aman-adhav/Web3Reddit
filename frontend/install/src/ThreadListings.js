@@ -29,8 +29,8 @@ function ThreadListings() {
             likes: thread.likes
           })
         }
-    
-        return parsedThreads;
+        
+        return parsedThreads.slice().reverse(); //display threads in order of date of creation
         
       }
     

@@ -1,36 +1,31 @@
 import { useEffect, useState } from "react";
-import {Route, Switch, useLocation} from "react-router-dom";
+import {Route, Switch, useLocation, useHistory} from "react-router-dom";
 import Board from "./Board";
 import ThreadModal from "./ThreadModal";
 import ThreadPopupModal from "./ThreadPopupModal";
 
 function RoutingSwitch() {
     let location = useLocation();
-    
+    let history = useHistory();
     let threadId = null;
 
     const [threadOpen, setThreadOpen] = useState(false);
 
-    if (location.state && (location.state.threadId !== undefined || location.state.threadId !== null)) {
+    if (location.state && (location.state.threadId !== null)) {
       location.pathname='/';
-      //if (threadOpen){
-        threadId = location.state.threadId;
-      // } else {
-      //   location.state.threadId = null;
-      // }
+      threadId = location.state.threadId;
     }
 
     useEffect(()=> {
-      console.log(threadOpen);
-      // if (!threadOpen){
-      //   threadId = null;
-      // }
+      if (!threadOpen){
+        history.push('/');
+      }
     }, [threadOpen])
 
     return (
         <div>
           {
-            (threadId !== undefined) && (
+            (threadId !== null) && (
               <div>
                 <ThreadPopupModal id={threadId} onClickOut={(val) => setThreadOpen(val)}/>
               </div>

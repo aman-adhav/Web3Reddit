@@ -4,7 +4,6 @@ import AuthModalContext from './AuthModalContext';
 import ClickOutHandler from 'react-clickout-handler';
 import AccountContext from './AccountContext';
 
-
 function AuthModal() {
 
     const modalContext = useContext(AuthModalContext)
@@ -37,7 +36,7 @@ function AuthModal() {
     
 
     return (
-        <div className={'w-screen h-screen absolute top-0 left-0 z-20 flex ' + visibleClass} style={{backgroundColor:'rgba(0,0,0,.6)'}}>
+        <div className={'w-screen h-screen absolute top-0 left-0 z-30 flex ' + visibleClass} style={{backgroundColor:'rgba(0,0,0,.6)'}}>
             <ClickOutHandler onClickOut={() => modalContext.setShow(false)}>
                 <div className='border border-crypdit_dark-search_text w-1/2 sm:w-1/4 bg-crypdit_dark p-5 text-crypdit_text mx-4 self-center mx-auto rounded-md'>
                     <h1 className="text-2xl mb-3 text-center font-bold">Login with Metamask</h1>

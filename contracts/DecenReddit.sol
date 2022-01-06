@@ -7,7 +7,9 @@ import "./Posts.sol";
 
 contract DecenReddit {
     uint totalThreads;
-
+    
+    event NewThread(uint threadId);
+    
     struct Thread{
         address madeBy;
         string title;
@@ -39,6 +41,7 @@ contract DecenReddit {
         });
     
         threadIds.push(totalThreads);
+        emit NewThread(totalThreads);
         totalThreads += 1;
     }
 

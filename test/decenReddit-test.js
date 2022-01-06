@@ -89,4 +89,12 @@ describe("DecenReddit", function () {
         expect(subPost.madeBy).to.equal(addr2.address);
     });
 
+    it("emits threadId when thread is created ", async function () {
+        let threadTitle = "Title 1"
+        expect(await threadsContract.createThread(threadBody, threadTitle))
+            .to.emit(threadsContract, "NewThread")
+            .withArgs(0);
+    });
+
+
 });

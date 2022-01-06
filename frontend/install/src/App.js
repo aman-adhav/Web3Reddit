@@ -9,11 +9,14 @@ import {Switch, Route, BrowserRouter as Router} from 'react-router-dom';
 import Board from './Board';
 import ThreadModal from './ThreadModal';
 import RoutingSwitch from './RoutingSwitch';
+import ThreadFormModal from './ThreadFormModal';
+import ThreadFormModalContext from './ThreadFormModalContext';
 
 function App() {
 
   const [currentAccount, setCurrentAccount] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showThreadFormModal, setShoWThreadFormModal] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -47,14 +50,17 @@ function App() {
 
   return (
     <AuthModalContext.Provider value={{show:showAuthModal, setShow: setShowAuthModal}}>
+      <ThreadFormModalContext.Provider value={{show:showThreadFormModal, setShow: setShoWThreadFormModal}}>
       <AccountContext.Provider value={{publicKey: currentAccount, setPublicKey: setCurrentAccount}}>
       <Router>
         <Header />
+        <AuthModal/>
+        <ThreadFormModal />
         <RoutingSwitch />
       </Router> 
-      <AuthModal/>
 
       </AccountContext.Provider>
+      </ThreadFormModalContext.Provider>
     </AuthModalContext.Provider>
   );
 }

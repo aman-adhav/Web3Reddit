@@ -1,4 +1,4 @@
-import PostForm from "./PostForm";
+import ThreadForm from "./ThreadForm";
 import Subheader from "./Subheader";
 import ThreadListings from "./ThreadListings";
 
@@ -6,7 +6,7 @@ function Board() {
     return (
         <div>
             <Subheader /> 
-            <PostForm />
+            <ThreadForm />
             <ThreadListings />
         </div>
     )
