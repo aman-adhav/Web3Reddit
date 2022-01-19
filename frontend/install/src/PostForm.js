@@ -29,7 +29,15 @@ function PostForm(props) {
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
-          const threadTxn = await threadsContractFactory.rootPost(threadId, postMessage);
+          let threadTxn;
+
+          if (props.rootPost){
+            threadTxn = await threadsContractFactory.rootPost(threadId, postMessage);
+          } else if (props.parentId) {
+            console.log(props.parentId, "lmao", threadId);
+            threadTxn = await threadsContractFactory.subPost(threadId, postMessage, props.parentId);
+          }
+
           console.log("Mining...", threadTxn.hash);
   
           await threadTxn.wait();
@@ -69,7 +77,7 @@ function PostForm(props) {
        <div>
            {accountProps.publicKey && (
                <>
-                { props.author && (
+                { !!props.author && (
                     <div className="mb-2">
                             Post as a/{shortAccountAdr()}
                         </div>

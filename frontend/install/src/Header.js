@@ -52,7 +52,7 @@ function Header() {
 
           {!account.publicKey && (
             <div className='mx-2 hidden sm:block'>
-              <button outline 
+              <button 
                 onClick={() => authModal.setShow(true)} 
                 className="mr-1 h-8 border border-gray-300 rounded-full px-3 text-sm font-bold text-gray-300 hover:bg-gray-300 hover:text-black">
                 Log In

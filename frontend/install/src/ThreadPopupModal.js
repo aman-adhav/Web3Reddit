@@ -14,7 +14,7 @@ function ThreadPopupModal(props) {
     
     const [visibleClass, setVisibleClass] = useState("hidden");
 
-    const [rootPosts, setRootPosts] = useState([]);
+    const [rootPostIds, setRootPostIds] = useState([]);
     const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
     const contractABI = abi.abi;
 
@@ -53,39 +53,21 @@ function ThreadPopupModal(props) {
           }
     }
 
-    async function retrieveRootPosts(threadsContractFactory, rootPostIds){
-        let parsedRootPosts = [];
-        for (const rootPostId in rootPostIds) {
-          let rootPost = await threadsContractFactory.getPost(threadId, rootPostId);
-          
-          parsedRootPosts.push({
-            author: rootPost.madeBy,
-            displayName: shortenAuthor(rootPost.madeBy),
-            message: rootPost.message,
-            timestamp: new Date(rootPost.timestamp * 1000),
-            postId: rootPost.postId.toNumber(),
-            likes: rootPost.likes
-          })
-        }
-        
-        return parsedRootPosts.slice().reverse(); //display threads in order of date of creation
-        
-      }
-    
-
-    const getRootPosts = async () => {
+    const getRootPostIds = async () => {
         try {
             const { ethereum } = window;
             
             if (ethereum) {
-              const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
+              const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+              //const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
               
-              const rootPostIds = await threadsContractFactory.rootPostIds(threadId)
-                
-              let parsedRootPosts = await retrieveRootPosts(threadsContractFactory, rootPostIds);
+              const parsedRootPostIds = await threadsContractFactory.rootPostIds(threadId)
               
-              setRootPosts(parsedRootPosts);
+              setRootPostIds(parsedRootPostIds);
+
               setLoading(false);
               setVisibleClass("block");
               props.onClickOut(true);
@@ -105,7 +87,7 @@ function ThreadPopupModal(props) {
 
     useEffect(() => {
         getThreadById();
-        getRootPosts()
+        getRootPostIds();
     }, [isLoading, props.id]);
 
     const renderThreadContent = () => {
@@ -133,9 +115,9 @@ function ThreadPopupModal(props) {
                         {!!thread && !!thread.threadId && (
                             <>
                                 <hr className="border-crypdit_border my-4" />
-                                <PostForm author key={"thread-"+thread.threadId} threadId={thread.threadId}/>
+                                <PostForm author key={"thread-"+thread.threadId} threadId={thread.threadId} rootPost/>
                                 <hr className="border-crypdit_border my-4" />
-                                <Posts threadId={thread.threadId} rootPosts={rootPosts}/>
+                                <Posts threadId={thread.threadId} postIds={rootPostIds} currLevel={0}/>
                             </>
                         )}
                         
