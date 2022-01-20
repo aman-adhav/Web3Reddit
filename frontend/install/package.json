@@ -10,6 +10,7 @@
     "autoprefixer": "^9",
     "axios": "^0.21.1",
     "craco": "^0.0.3",
+    "ethers": "^5.5.3",
     "netlify-cli": "^8.10.2",
     "postcss": "^7",
     "react": "^17.0.2",
