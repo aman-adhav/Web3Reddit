@@ -22,7 +22,7 @@ function PostForm(props) {
 
    async function createPost(e) {
        e.preventDefault();
-    try {
+        try {
         const { ethereum } = window;
   
         if (ethereum) {
@@ -30,11 +30,9 @@ function PostForm(props) {
           const signer = provider.getSigner();
           const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
           let threadTxn;
-
           if (props.rootPost){
             threadTxn = await threadsContractFactory.rootPost(threadId, postMessage);
-          } else if (props.parentId) {
-            console.log(props.parentId, "lmao", threadId);
+          } else if (props.parentId >= 0) {
             threadTxn = await threadsContractFactory.subPost(threadId, postMessage, props.parentId);
           }
 
@@ -45,7 +43,12 @@ function PostForm(props) {
 
           console.log("Post created!")
           setPostMessage('');
-  
+          if (props.rootPost){
+            props.onSubmit();
+          } else {
+            props.onCancel();
+            props.onSubmit();
+          }
         } else {
           console.log("Ethereum object doesn't exist!");
         }

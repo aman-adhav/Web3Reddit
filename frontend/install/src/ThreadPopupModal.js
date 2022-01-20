@@ -59,8 +59,7 @@ function ThreadPopupModal(props) {
             
             if (ethereum) {
               const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+              const signer = provider.getSigner();
               //const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
               
@@ -88,6 +87,7 @@ function ThreadPopupModal(props) {
     useEffect(() => {
         getThreadById();
         getRootPostIds();
+        console.log("useEffect was performed")
     }, [isLoading, props.id]);
 
     const renderThreadContent = () => {
@@ -112,12 +112,12 @@ function ThreadPopupModal(props) {
                     <div className="block scrollbar-hide overflow-scroll" style={{maxHeight: "calc(100vh - 200px)"}}>
                         {renderThreadContent()}
 
-                        {!!thread && !!thread.threadId && (
+                        {!!thread && thread.threadId >= 0 && (
                             <>
                                 <hr className="border-crypdit_border my-4" />
-                                <PostForm author key={"thread-"+thread.threadId} threadId={thread.threadId} rootPost/>
+                                <PostForm author key={"thread-"+thread.threadId} onSubmit={event => setLoading(true)} threadId={thread.threadId} rootPost/>
                                 <hr className="border-crypdit_border my-4" />
-                                <Posts threadId={thread.threadId} postIds={rootPostIds} currLevel={0}/>
+                                <Posts threadId={thread.threadId} postIds={rootPostIds} currLevel={0} />
                             </>
                         )}
                         

@@ -11,23 +11,37 @@ function RoutingSwitch() {
 
     const [threadOpen, setThreadOpen] = useState(false);
 
-    if (location.state && (location.state.threadId !== null)) {
-      location.pathname='/';
-      threadId = location.state.threadId;
+    if (location.state && location.state.threadId) {
+      location.pathname = '/';
+      if (threadOpen) {
+        threadId = location.state.threadId;
+      } else {
+        location.state.threadId = null;
+      }
+  
     }
 
-    useEffect(()=> {
-      if (!threadOpen){
+    function closeModal(val){
+      if (!val) {
         history.push('/');
       }
-    }, [threadOpen])
+      setThreadOpen(val);
+    }
+
+    useEffect(() => {
+      setThreadOpen(true);
+    }, [threadId]);
+  
+    useEffect(() => {
+      threadId = null;
+    }, [threadOpen]);
 
     return (
         <div>
           {
             (threadId !== null) && (
               <div>
-                <ThreadPopupModal id={threadId} onClickOut={(val) => setThreadOpen(val)}/>
+                <ThreadPopupModal id={threadId} onClickOut={(val) => closeModal(val)}/>
               </div>
           
             )

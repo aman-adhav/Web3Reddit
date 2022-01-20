@@ -3,10 +3,12 @@ import { ethers } from "ethers";
 import abi from './utils/DecenReddit.json';
 import TimeAgo from 'timeago-react';
 import PostForm from './PostForm';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 
 function Posts(props) { 
 
-    const pstIds = props.postIds;
+    let pstIds = props.postIds;
 
     const threadId = props.threadId;
 
@@ -42,14 +44,12 @@ function Posts(props) {
             
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+                const signer = provider.getSigner();
               //const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
                 
               let parsedPosts = [];
-              
-              console.log(pstIds, "water");
+
               for (const postId in pstIds) {
                 let post = await threadsContractFactory.getPost(threadId, pstIds[postId]);
 
@@ -66,7 +66,6 @@ function Posts(props) {
             
               setPosts(parsedPosts.slice().reverse());
               setLoading(false);
-
             } else {
               console.log("Ethereum object doesn't exist!");
             }
@@ -77,37 +76,39 @@ function Posts(props) {
 
     useEffect(() => {
         getPosts();
-        console.log("PostIds: ", pstIds);
-        console.log("Posts", posts);
-        console.log("current level", currLevel);
-    }, [isLoading]);
+    }, [isLoading, pstIds]);
 
     return (
-        <>
-            {currLevel < 5 && (
+        <div className={'my-2 text-crypdit_text'}>
+            {currLevel < 10 && (
                 <div className={''}>
                     {posts.map(post => (
-                        <div key={"post-" + post.postId} >
+                        <div key={"post-" + post.postId} className={'mb-2'}>
                             <div className="flex mb-2">
                                 <div className={'bg-crypdit_text mr-2 w-10 h-10 rounded-full'}/>
                                 <div className="leading-10 px-2 text-lg font-sans">{post.displayName}</div>
                                 <TimeAgo className="leading-10 px-2 text-md font-sans" datetime={post.timestamp} />
                             </div>
-                            <div className="border-l-2 border-crypdit_text-darker p-3 ml-4">
-                                {post.message}
+                             <div className="border-l-2 border-crypdit_text-darker p-3 pb-0" style={{marginLeft:'18px'}}>
+                             <div className="pl-4">
                                 <div>
+                                 <ReactMarkdown remarkPlugins={[gfm]} children={post.message} />
+                                </div>
+                                
                                     <button
                                         onClick={() => setReplyPostForm(post.postId)} 
                                         className="bg-crypdit_dark py-2 text-crypdit_text-darker border-none pl-0 pr-0" >
                                         Reply
                                     </button>
                                     {post.postId === replyPostForm && (
-                                        <PostForm key={"post-" + post.postId} threadId={props.threadId} parentId={post.postId} onCancel={event => setReplyPostForm(false)}/>
+                                        <PostForm key={"post-" + post.postId} threadId={props.threadId} onSubmit={event => setLoading(true)} parentId={post.postId} onCancel={event => setReplyPostForm(false)}/>
                                     )}
-                                </div>
+                                
+                                
                                 {!!post && post.subPostIds.length > 0 && (
                                 <Posts threadId={props.threadId} postIds={post.subPostIds} currLevel={currLevel+1}/>
                                 )}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -115,7 +116,7 @@ function Posts(props) {
 
                 </div>
             )}
-        </>
+        </div>
     );
 }
 
