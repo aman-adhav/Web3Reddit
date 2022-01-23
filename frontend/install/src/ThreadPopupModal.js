@@ -22,7 +22,7 @@ function ThreadPopupModal(props) {
         return address.substring(0,6) + "..." + address.substring(37, 41);
     }
 
-    function parseThreadData(threadData){
+    function parseThreadData(threadData, walletVote){
         return ({
             author: threadData.madeBy,
             displayName: shortenAuthor(threadData.madeBy),
@@ -30,7 +30,8 @@ function ThreadPopupModal(props) {
             message: threadData.message,
             timestamp: new Date(threadData.timestamp * 1000),
             threadId: threadData.threadId,
-            likes: threadData.likes
+            votes: threadData.votes.toNumber(),
+            walletHolderVote: walletVote.toNumber(),
           })
     }
 
@@ -42,9 +43,9 @@ function ThreadPopupModal(props) {
               const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
               
-              const threadData = await threadsContractFactory.getThread(threadId);
+              const [threadData, walletHolderVote] = await threadsContractFactory.getThread(threadId);
               
-              setThread(parseThreadData(threadData));
+              setThread(parseThreadData(threadData, walletHolderVote));
             } else {
               console.log("Ethereum object doesn't exist!");
             }
@@ -108,7 +109,7 @@ function ThreadPopupModal(props) {
     return (
         <div className={'w-screen h-screen fixed top-0  left-0 z-20 flex ' + visibleClass} style={{backgroundColor:'rgba(0,0,0,.9)'}}>
              <ClickOutHandler onClickOut={() => close()}>
-                <div className='border my-4 border-crypdit_dark-search_text w-3/4 md:w-1/2 bg-crypdit_dark text-crypdit_text mx-4 self-center mx-auto p-4 rounded-md'>
+                <div className='border my-4 border-crypdit_dark-search_text w-3/4 md:w-1/2 bg-crypdit_dark-search_form text-crypdit_text mx-4 self-center mx-auto p-4 rounded-md'>
                     <div className="block scrollbar-hide overflow-scroll" style={{maxHeight: "calc(100vh - 200px)"}}>
                         {renderThreadContent()}
 

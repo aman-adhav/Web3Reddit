@@ -18,7 +18,7 @@ function Thread(threadData) {
         );
       } else {
         return (
-          <div className="block border border-crypdit_border bg-crypdit_post-form p-2 rounded-md">
+          <div className="block border border-none bg-crypdit_post-form rounded-md">
             <ThreadContent {...threadData} />
           </div>
         );
@@ -26,7 +26,7 @@ function Thread(threadData) {
     }
 
     return (
-        <div className='px-6 text-crypdit_text pb-4'>
+        <div className='text-crypdit_text pb-4'>
           {threadLinkClass()}
         </div>
     );

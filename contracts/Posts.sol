@@ -15,8 +15,10 @@ contract Posts {
         uint postId; 
         string message;
         uint timestamp;
-        uint likes;
+        int votes;
     }
+
+    mapping(address => mapping(uint => int)) votes;
 
     mapping(uint => Post) posts;
     uint[] rootPostIds;
@@ -24,14 +26,16 @@ contract Posts {
     constructor() payable {
     }
 
-    function _createPost(uint postId, string memory _message, address author) private view returns (Post memory){
+    function _createPost(uint postId, string memory _message, address author) private returns (Post memory){
+        
+        votes[author][postId] = 1;
         return Post({
             madeBy: author,
             subPosts: new uint[](0),
             postId: postId,
             message: _message,
             timestamp: block.timestamp,
-            likes: 1
+            votes: 1
         });
     }
 
@@ -50,8 +54,13 @@ contract Posts {
         totalPosts += 1;
     }
 
-    function getPost(uint postId) public view returns (Post memory){
-        return posts[postId];
+    function vote(uint postId, address author, int udvote) public {
+        votes[author][postId] = udvote;
+        posts[postId].votes += udvote;
+    }
+
+    function getPost(uint postId, address author) public view returns (Post memory, int){
+        return (posts[postId], votes[author][postId]);
     }
 
     function getTotalPosts() public view returns(uint){

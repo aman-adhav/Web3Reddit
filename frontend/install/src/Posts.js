@@ -5,6 +5,7 @@ import TimeAgo from 'timeago-react';
 import PostForm from './PostForm';
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
+import Vote from './Vote';
 
 function Posts(props) { 
 
@@ -51,7 +52,7 @@ function Posts(props) {
               let parsedPosts = [];
 
               for (const postId in pstIds) {
-                let post = await threadsContractFactory.getPost(threadId, pstIds[postId]);
+                let [post, walletVote] = await threadsContractFactory.getPost(threadId, pstIds[postId]);
 
                 parsedPosts.push({
                   author: post.madeBy,
@@ -59,8 +60,9 @@ function Posts(props) {
                   message: post.message,
                   timestamp: new Date(post.timestamp * 1000),
                   postId: post.postId.toNumber(),
-                  likes: post.likes,
+                  votes: post.votes.toNumber(),
                   subPostIds: convertArrayToIntArray(post.subPosts),
+                  walletHolderVote: walletVote.toNumber()
                 })
               }
             
@@ -90,14 +92,14 @@ function Posts(props) {
                                 <TimeAgo className="leading-10 px-2 text-md font-sans" datetime={post.timestamp} />
                             </div>
                              <div className="border-l-2 border-crypdit_text-darker p-3 pb-0" style={{marginLeft:'18px'}}>
-                             <div className="pl-4">
+                             <div className="pl-4 -mt-4">
                                 <div>
                                  <ReactMarkdown remarkPlugins={[gfm]} children={post.message} />
                                 </div>
-                                
+                                    <Vote walletHolderVote={post.walletHolderVote} votes={post.votes} voteType={"post"} threadId={threadId} postId={post.postId}/>
                                     <button
                                         onClick={() => setReplyPostForm(post.postId)} 
-                                        className="bg-crypdit_dark py-2 text-crypdit_text-darker border-none pl-0 pr-0" >
+                                        className="bg-crypdit_dark-search_form py-2 text-crypdit_text-darker border-none pl-0 pr-0" >
                                         Reply
                                     </button>
                                     {post.postId === replyPostForm && (

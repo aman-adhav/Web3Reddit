@@ -69,8 +69,9 @@ describe("Posts", function () {
 
         const invalidPostId = 5;
 
-        let getPost = await postsContract.getPost(invalidPostId);
+        let [getPost, votes] = await postsContract.getPost(invalidPostId, address);
         expect(getPost.timestamp).to.equal(0);
+        expect(votes).to.equal(0);
     });
 
     it ("returns a list of subPosts for a given post", async function () {
@@ -84,13 +85,34 @@ describe("Posts", function () {
         let thirdPost = await postsContract.subPost("Third Post", 0, address);
         await thirdPost.wait();
         
-        let getPost = await postsContract.getPost(0);
+        let [getPost, votes] = await postsContract.getPost(0, address);
 
         expect(getPost.subPosts.toString()).to.equal('1,2');
     
-        getPost = await postsContract.getPost(2);
+        [getPost, votes] = await postsContract.getPost(2, address);
 
         expect(getPost.subPosts.toString()).to.equal('');
+    });
+
+    it ("upvote and downvote a post by postId", async function () {
+
+        let [owner, addr1, addr2] = await ethers.getSigners();
+
+        let firstPost = await postsContract.rootPost('First Post', addr1.address);
+        await firstPost.wait();
+
+        let [getPost, votes] = await postsContract.getPost(0, addr1.address);
+
+        expect(votes).to.equal(1);
+        expect(getPost.votes).to.equal(1);
+
+        let downvote = await postsContract.vote(0, addr2.address, -1);
+
+        [getPost, votes] = await postsContract.getPost(0, addr2.address);
+
+        expect(votes).to.equal(-1);
+
+        expect(getPost.votes).to.equal(0);
     });
 
   });

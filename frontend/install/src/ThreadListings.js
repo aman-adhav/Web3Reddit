@@ -17,8 +17,7 @@ function ThreadListings() {
       async function retrieveThreads(threadsContractFactory, threadIds){
         let parsedThreads = [];
         for (const threadId in threadIds){
-          let thread = await threadsContractFactory.getThread(threadId);
-          
+          let [thread, walletVote] = await threadsContractFactory.getThread(threadId);
           parsedThreads.push({
             author: thread.madeBy,
             displayName: shortenAuthor(thread.madeBy),
@@ -26,10 +25,11 @@ function ThreadListings() {
             message: thread.message,
             timestamp: new Date(thread.timestamp * 1000),
             threadId: thread.threadId.toNumber(),
-            likes: thread.likes
+            votes: thread.votes.toNumber(),
+            walletHolderVote: walletVote.toNumber()
           })
         }
-        
+
         return parsedThreads.slice().reverse(); //display threads in order of date of creation
         
       }
@@ -46,7 +46,7 @@ function ThreadListings() {
             const threadIds = await threadsContractFactory.getThreadIds();
             console.log("ThreadIds...", threadIds);
             let parsedThreads = await retrieveThreads(threadsContractFactory, threadIds);
-    
+            
             setThreads(parsedThreads);
     
           } else {
@@ -62,7 +62,7 @@ function ThreadListings() {
       }, [])
 
     return(
-        <div className="bg-crypdit_dark">
+        <div className="bg-crypdit_dark px-6 min-h-screen">
           {threads.map(threadData => (
             <Thread key={threadData.threadId} {...threadData} clickable={true}/>
           ))}

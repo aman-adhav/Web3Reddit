@@ -11,6 +11,8 @@ function PostForm(props) {
    const accountProps = useContext(AccountContext);
    const [postMessage, setPostMessage] = useState('');
 
+   const [loading, setLoading] = useState(false);
+
    const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
    const contractABI = abi.abi;
 
@@ -42,6 +44,7 @@ function PostForm(props) {
           console.log("Mined -- ", threadTxn.hash);
 
           console.log("Post created!")
+          setLoading(false);
           setPostMessage('');
           if (props.rootPost){
             props.onSubmit();
@@ -51,9 +54,11 @@ function PostForm(props) {
           }
         } else {
           console.log("Ethereum object doesn't exist!");
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
 
         if (error.code === "UNSUPPORTED_OPERATION"){
             authModalContext.setShow(true);
@@ -77,7 +82,7 @@ function PostForm(props) {
 
 
     return (
-       <div>
+       <div className="text-crypdit_text">
            {accountProps.publicKey && (
                <>
                 { !!props.author && (
@@ -86,15 +91,17 @@ function PostForm(props) {
                         </div>
                 )}
                 <form onSubmit={e => createPost(e)}>
-                        <Textarea className="w-full mb-3"
+                        <Textarea className="w-full mb-3 border border-crypdit_border"
                             onChange={event => setPostMessage(event.target.value)}
                             value={postMessage}
                             placeholder={'Your comment. You can use markdown here. (No support for text formatting yet)'}/>
                         <div className="text-right" >
                             {handleCancel()}
                             <button
-                                className="border border-gray-300 rounded-full px-3 text-sm font-bold bg-gray-300 text-crypdit_dark px-4 py-2 p-2">
-                                Comment
+                                className="border border-gray-300 rounded-full px-3 text-sm font-bold bg-gray-300 text-crypdit_dark px-4 py-2 p-2"
+                                onClick={event => setLoading(true)}>
+                                  {loading && <span className="animate-pulse">Loading...</span>}
+                                {!loading && <span>Comment</span>}
                             </button>
                         </div>
                     </form>
