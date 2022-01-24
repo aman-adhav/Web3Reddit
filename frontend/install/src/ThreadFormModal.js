@@ -58,8 +58,11 @@ function ThreadFormModal() {
             setClickOutState(true);
         }
         let threadsContractFactory;
-        const onNewThread = (threadId) => {
+        const onNewThread = (threadId, userVote) => {
             setNewThreadId(threadId);
+            console.log("/n###################/n");
+            console.log(userVote);
+            console.log("/n###################/n");
           };
       
         if (window.ethereum) {

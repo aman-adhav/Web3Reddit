@@ -38,10 +38,13 @@ function ThreadModal(props) {
             const { ethereum } = window;
             
             if (ethereum) {
-              const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+              //const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
       
               const [threadData, walletHolderVote] = await threadsContractFactory.getThread(threadId);
+              
               setThread(parseThreadData(threadData, walletHolderVote));
               setLoading(false);
       

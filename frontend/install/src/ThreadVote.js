@@ -2,7 +2,7 @@ import {useState} from 'react';
 import { ethers } from "ethers";
 import abi from './utils/DecenReddit.json';
 
-function Vote(props) {
+function ThreadVote(props) {
 
     let walletHolderVote = props.walletHolderVote;
     const [votes, setVotes] = useState(props.votes);
@@ -49,7 +49,7 @@ function Vote(props) {
         }
 
       }
-    
+
 
     function arrow(direction) {
         const directionNum = direction === 'up' ? 1 : -1;
@@ -82,12 +82,13 @@ function Vote(props) {
 
 
     return (
-        <div className='inline-block mr-2'>
+        <div className='mr-2'>
             {arrow('up')}
-            <div className='inline-block'>{votes}</div>
+            <div className="m-1">{votes}</div>
             {arrow('down')}
         </div>
     )
 } 
 
-export default Vote;
+
+export default ThreadVote;

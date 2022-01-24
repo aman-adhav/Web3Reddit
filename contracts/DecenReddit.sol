@@ -8,7 +8,7 @@ import "./Posts.sol";
 contract DecenReddit {
     uint totalThreads;
     
-    event NewThread(uint threadId);
+    event NewThread(uint threadId, int userVote);
     
     struct Thread{
         address madeBy;
@@ -21,14 +21,13 @@ contract DecenReddit {
     }
 
     mapping(uint => Thread) threads;
-    
-    mapping(address => mapping(uint => int)) public threadVotes;
 
     uint[] threadIds;
 
     constructor() payable {
     }
 
+    mapping(address => mapping(uint => int)) public threadVotes;
 
     function createThread(string memory _message, string memory _title) public {
         // uint threadId = uint(keccak256(abi.encodePacked(_message, _title)));
@@ -45,7 +44,7 @@ contract DecenReddit {
 
         threadVotes[msg.sender][totalThreads] = 1;
         threadIds.push(totalThreads);
-        emit NewThread(totalThreads);
+        emit NewThread(totalThreads, threadVotes[msg.sender][totalThreads]);
         totalThreads += 1;
     }
 

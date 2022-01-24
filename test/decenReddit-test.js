@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("DecenReddit", function () {
+describe.only("DecenReddit", function () {
 
     const threadBody = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     let threadsContractFactory;
@@ -24,7 +24,7 @@ describe("DecenReddit", function () {
     it("creates a new thread with different threadIds", async function () {
         let threadTitle = "Title 1"
         let firstThread = await threadsContract.createThread(threadBody, threadTitle);
-        await firstThread.wait()
+        await firstThread.wait();
 
         threadTitle = "Title 2"; 
 
@@ -48,6 +48,8 @@ describe("DecenReddit", function () {
         let thread = await threadsContract.createThread(threadBody, threadTitle);
         let threadId = 0;
         [thread, threadVotes] = await threadsContract.getThread(threadId);
+
+        expect(threadVotes).to.equal(1);
         
         let postMessage = "Blah Blah Blah";
         let threadPost = await threadsContract.rootPost(threadId, postMessage);
@@ -127,7 +129,7 @@ describe("DecenReddit", function () {
         let threadTitle = "Title 1"
         expect(await threadsContract.createThread(threadBody, threadTitle))
             .to.emit(threadsContract, "NewThread")
-            .withArgs(0);
+            .withArgs(0, 1);
     });
 
 

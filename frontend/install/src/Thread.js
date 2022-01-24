@@ -1,6 +1,6 @@
-import { defaultProps } from "react-clickout-handler";
 import {Link} from "react-router-dom";
 import ThreadContent from "./ThreadContent";
+import ThreadVote from "./ThreadVote";
 
 
 function Thread(threadData) {
@@ -13,13 +13,19 @@ function Thread(threadData) {
       if (threadData.clickable){
         return (
           <Link to={{pathname: threadUrl, state: {threadId: threadId}}} className={linkClassName + " hover:border-crypdit_text cursor-pointer"}>
-            <ThreadContent {...threadData} />
+            <div className="flex relative">
+              <ThreadVote walletHolderVote={threadData.walletHolderVote} votes={threadData.votes} voteType={"thread"} threadId={threadId}/>
+              <ThreadContent {...threadData} />
+            </div>
           </Link>
         );
       } else {
         return (
           <div className="block border border-none bg-crypdit_post-form rounded-md">
-            <ThreadContent {...threadData} />
+            <div className="flex relative">
+              <ThreadVote walletHolderVote={threadData.walletHolderVote} votes={threadData.votes} voteType={"thread"} threadId={threadId}/>
+              <ThreadContent {...threadData} />
+            </div>
           </div>
         );
       }

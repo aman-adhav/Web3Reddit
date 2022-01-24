@@ -5,6 +5,7 @@ import abi from './utils/DecenReddit.json';
 import ClickOutHandler from "react-clickout-handler";
 import PostForm from "./PostForm";
 import Posts from "./Posts";
+import ThreadVote from "./ThreadVote";
 
 function ThreadPopupModal(props) {
 
@@ -40,7 +41,9 @@ function ThreadPopupModal(props) {
             const { ethereum } = window;
             
             if (ethereum) {
-              const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+              //const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
               const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
               
               const [threadData, walletHolderVote] = await threadsContractFactory.getThread(threadId);
@@ -98,7 +101,10 @@ function ThreadPopupModal(props) {
             return (
                 <>
                     { thread && (
-                        <ThreadContent {...thread}/>
+                        <div className="flex relative">
+                         <ThreadVote walletHolderVote={thread.walletHolderVote} votes={thread.votes} voteType={"thread"} threadId={thread.threadId}/>
+                         <ThreadContent {...thread}/>
+                       </div>
                     )}
                     
                 </>

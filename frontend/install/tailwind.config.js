@@ -4,6 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        upvote: '#f54404',
+        downvote: '#3838ff',
         crypdit_dark: {
           DEFAULT: '#030303',
           search_form:'#1a1a1a',

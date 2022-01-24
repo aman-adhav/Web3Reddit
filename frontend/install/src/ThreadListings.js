@@ -18,6 +18,10 @@ function ThreadListings() {
         let parsedThreads = [];
         for (const threadId in threadIds){
           let [thread, walletVote] = await threadsContractFactory.getThread(threadId);
+          console.log(walletVote);
+          // let water = await threadsContractFactory.getTempVotes(threadId);
+          // console.log(water[0], "yesssss");
+
           parsedThreads.push({
             author: thread.madeBy,
             displayName: shortenAuthor(thread.madeBy),
@@ -40,7 +44,8 @@ function ThreadListings() {
           const { ethereum } = window;
     
           if (ethereum) {
-            const signer = ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = provider.getSigner();
             const threadsContractFactory = new ethers.Contract(contractAddress, contractABI, signer);
             
             const threadIds = await threadsContractFactory.getThreadIds();
