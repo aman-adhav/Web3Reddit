@@ -1,5 +1,9 @@
 # Web3.0 Reddit
 
+Checkout https://crypdit.netlify.app/
+
+- Login in with your Metamask wallet!
+
 Recreating Reddit using Solidity and React! This is the first iteration of the app and as such, it'll have the following functions:
 
 - Creation of Threads
